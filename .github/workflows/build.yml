@@ -1,0 +1,59 @@
+name: build
+
+on:
+  push:
+    paths: 'src/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: linux-x86_64
+            compiler: g++
+            output: out/attendance
+            artifact_name: linux-x86_64
+          - name: windows-x86_64
+            compiler: x86_64-w64-mingw32-g++
+            output: out/attendance.exe
+            artifact_name: windows-x86_64
+          - name: android-arm64
+            compiler: aarch64-linux-android29-clang++
+            output: out/attendance
+            artifact_name: android-arm64
+          # MacOS? No idea, you can add if you use it
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Install mingw
+        if: matrix.name == 'windows-x86_64'
+        run: |
+          sudo apt-get update
+          sudo apt-get install mingw-w64
+
+      - name: Setup ndk
+        if: matrix.name == 'android-arm64'
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r29
+
+      - name: Build
+        run: |
+          mkdir -p out
+          export PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH"
+          ${{ matrix.compiler }} src/attendance.cpp -o ${{ matrix.output }}
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.output }}
