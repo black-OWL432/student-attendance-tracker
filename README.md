@@ -4,3 +4,7 @@
 
 - Source code: `/src`
 - Documentation: `/docs`
+
+## Pre-build
+
+- via [GitHub actions](https://github.com/black-OWL432/student-attendance-tracker/actions/workflows/build.yml)
