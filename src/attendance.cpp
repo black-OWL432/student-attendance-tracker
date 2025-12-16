@@ -25,7 +25,11 @@
 using namespace std;
 
 string sheetName;
-string columns[3] = {"StudentID", "Name", "Status"};  //modify here
+string columns[3] = {
+	"StudentID",
+	"Name",
+	"Status"
+};  //modify here
 
 void printDoubleLine() {
 	cout << "===========================================" << endl;
@@ -42,41 +46,40 @@ void printAppHeader() {
 	cout << endl;
 }
 
-void printSectionHeader(string title){
+void printSectionHeader(string title) {
 	cout << endl;
 	printSingleLine();
 	cout << " " << title << endl;
 	printSingleLine();
 }
 
-void setupColumns(){
+void setupColumns() {
 	int numColumns;
 	cout << "Define number of columns (max 10): ";
 	cin >> numColumns;
-	cin.ignore(); // Clear newline character from input buffer
-	cout<<endl;
+	cin.ignore();	// Clear newline character from input buffer
+	cout << endl;
 
 	for (int i = 0; i < numColumns; i++) {
-		string columnName;    //modify here
+		string columnName;	//modify here
 		cout << "Enter column " << (i + 1) << " name: ";
-		getline(cin, columnName);// Store or process columnName as needed
+		getline(cin, columnName);	// Store or process columnName as needed
 	}
 	
-	cout<<endl;
+	cout << endl;
 	cout << "Columns structure created successfully." << endl;
-	cout<<endl;
+	cout << endl;
 }
 
-void printInsertRowInterface(string colNames[], int colCount){
+void printInsertRowInterface(string colNames[], int colCount) {
 	cout << "Insert Attendance Row:" << endl;
-	for(int i=0; i<colCount; i++){
+	for(int i = 0; i < colCount; i++) {
 		cout << "Enter" << colNames[i] << ": ";
 		string input;
 		getline(cin, input);
 	}
 	cout << "Attendance row inserted successfully." << endl;
 }
-
 
 int main() {
 
@@ -91,9 +94,6 @@ int main() {
 
 	printSectionHeader("Insert New Attendance Row");
 
-	printInsertRowInterface(columns, 3); //modify here
+	printInsertRowInterface(columns, 3);	//modify here
 	return 0;
 }
-
-
-
