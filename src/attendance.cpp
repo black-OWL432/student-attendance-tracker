@@ -24,38 +24,60 @@
 
 using namespace std;
 
-string sheetName;
-
-const int columnSize = 3;
-string columns[columnSize] = {
-	"StudentID",
-	"Name",
-	"Status"
-};  //modify here
-
 const int dividerSize = 40;
 const string doubleLine(dividerSize, '=');
 const string singleLine(dividerSize, '-');
 
+const int maxRows = 100;
+const int maxColumn = 10;
+
+string sheetName;
+string columnNames[maxColumn];
+string dataRow[maxRows][maxColumn];
+
+int columnCount;
+int rowCount = 0;
+
 // Function declare
 void printHeader(string);
 void setupColumns();
-void printInsertRowInterface(string[]);
+void printInsertRowInterface();
+
+/**
+ * Concept explaination
+ * in first row, we setup columnName, let's say three column, then set thier name: id, name, status
+ * then we add data into folowing row as long as it doesn't exceed maxRows limitation
+ * 
+ * first row know as columnNames[index]
+ * { id, name, status }
+ * 
+ * following row known as dataRow[number of row][column's index]
+ * {
+ * 	{ 1001, Jan, 1 },
+ * 	{ 1002, John, 0 }
+ * }
+ * 
+ * then we print it in csv format
+ * id,name,status		<- header, columnName
+ * 1001,Jan,1			<- data content, 
+ * 1002,John,0
+ */
 
 int main() {
 
 	printHeader("");
 
 
-	cout << "Enter attendace sheet name: ";
+	cout << "Enter attendance sheet name: ";
 	cin >> sheetName;
 	cout << "Attendance sheet \"" << sheetName << "\" created successfully." << endl;
-	
+
 	setupColumns();
 
-	printHeader(" Insert New Attendance Row ");
+	printHeader("Insert New Attendance Row");
 
-	printInsertRowInterface(columns);	// modify here
+	// todo: loop until user decide to stop adding row
+	printInsertRowInterface();
 
 	return 0;
 }
@@ -80,27 +102,24 @@ void printHeader(string title) {
 }
 
 void setupColumns() {
-	int numColumns;
 	cout << "Define number of columns (max 10): ";
-	cin >> numColumns;
+	cin >> columnCount;
 	cin.ignore();	// Clear newline character from input buffer
 	cout << endl;
 
-	for (int i = 0; i < numColumns; i++) {
-		string columnName;	//modify here
+	for (int i = 0; i < columnCount; i++) {
 		cout << "Enter column " << (i + 1) << " name: ";
-		getline(cin, columnName);	// Store or process columnName as needed
+		getline(cin, columnNames[i]);
 	}
-	
-	cout << endl << "Columns structure created successfully." << endl << endl;
+
+	cout << endl << "Sheet structure created successfully." << endl << endl;
 }
 
-void printInsertRowInterface(string targetColumn[]) {
-	cout << "Insert Attendance Row:" << endl;
-	for(int i = 0; i < columnSize; i++) {
-		cout << "Enter" << targetColumn[i] << ": ";
-		string input;
-		getline(cin, input);
+void printInsertRowInterface() {
+	for(int i = 0; i < columnCount; i++) {
+		cout << "Enter " << columnNames[i] << ": ";
+		getline(cin, dataRow[rowCount][i]);
 	}
-	cout << "Attendance row inserted successfully." << endl;
+	rowCount++;
+	cout << "Row inserted successfully." << endl;
 }
