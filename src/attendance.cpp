@@ -25,32 +25,58 @@
 using namespace std;
 
 string sheetName;
-string columns[3] = {
+
+const int columnSize = 3;
+string columns[columnSize] = {
 	"StudentID",
 	"Name",
 	"Status"
 };  //modify here
 
-void printDoubleLine() {
-	cout << "===========================================" << endl;
+const int dividerSize = 40;
+const string doubleLine(dividerSize, '=');
+const string singleLine(dividerSize, '-');
+
+// Function declare
+void printHeader(string);
+void setupColumns();
+void printInsertRowInterface(string[]);
+
+int main() {
+
+	printHeader("");
+
+
+	cout << "Enter attendace sheet name: ";
+	cin >> sheetName;
+	cout << "Attendance sheet \"" << sheetName << "\" created successfully." << endl;
+	
+	setupColumns();
+
+	printHeader(" Insert New Attendance Row ");
+
+	printInsertRowInterface(columns);	// modify here
+
+	return 0;
 }
 
-void printSingleLine() {
-	cout << "-------------------------------------------" << endl;
-}
+/**
+ * Print initial header if arg is empty string, else print custom header
+ */
+void printHeader(string title) {
+	string content, divider;
 
-void printAppHeader() {
-	printDoubleLine();
-	cout << " STUDENT ATTENDANCE TRACKER - MILESTONE 1 " << endl;
-	printDoubleLine();
-	cout << endl;
-}
+	if (title.empty()) {
+		content = " STUDENT ATTENDANCE TRACKER - MILESTONE 1 ";
+		divider = doubleLine;
+	} else {
+		content = title;
+		divider = singleLine;
+	}
 
-void printSectionHeader(string title) {
-	cout << endl;
-	printSingleLine();
-	cout << " " << title << endl;
-	printSingleLine();
+	cout << divider << endl;
+	cout << content << endl;
+	cout << divider << endl << endl;
 }
 
 void setupColumns() {
@@ -66,34 +92,15 @@ void setupColumns() {
 		getline(cin, columnName);	// Store or process columnName as needed
 	}
 	
-	cout << endl;
-	cout << "Columns structure created successfully." << endl;
-	cout << endl;
+	cout << endl << "Columns structure created successfully." << endl << endl;
 }
 
-void printInsertRowInterface(string colNames[], int colCount) {
+void printInsertRowInterface(string targetColumn[]) {
 	cout << "Insert Attendance Row:" << endl;
-	for(int i = 0; i < colCount; i++) {
-		cout << "Enter" << colNames[i] << ": ";
+	for(int i = 0; i < columnSize; i++) {
+		cout << "Enter" << targetColumn[i] << ": ";
 		string input;
 		getline(cin, input);
 	}
 	cout << "Attendance row inserted successfully." << endl;
-}
-
-int main() {
-
-	printAppHeader();
-
-
-	cout << "Enter attendace sheet name: ";
-	cin >> sheetName;
-	cout << "Attendance sheet \"" << sheetName << "\" created successfully." << endl;
-	
-	setupColumns();
-
-	printSectionHeader("Insert New Attendance Row");
-
-	printInsertRowInterface(columns, 3);	//modify here
-	return 0;
 }
