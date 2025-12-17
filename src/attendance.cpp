@@ -24,19 +24,19 @@
 
 using namespace std;
 
-const int dividerSize = 40;
-const string doubleLine(dividerSize, '=');
-const string singleLine(dividerSize, '-');
+const int DIVIDER_SIZE = 40;
+const string doubleLine(DIVIDER_SIZE, '=');
+const string singleLine(DIVIDER_SIZE, '-');
 
-const int maxRows = 100;
-const int maxColumn = 10;
+const int MAX_ROWS = 100;
+const int MAX_COLUMNS = 10;
 
 string sheetName;
-string columnNames[maxColumn];
-string dataRow[maxRows][maxColumn];
+string columnNames[MAX_COLUMNS];
+string dataRows[MAX_ROWS][MAX_COLUMNS];
 
-int columnCount;
-int rowCount = 0;
+int COLUMN_COUNT;
+int ROW_COUNT = 0;
 
 // Function declare
 void printHeader(string);
@@ -46,12 +46,12 @@ void printInsertRowInterface();
 /**
  * Concept explaination
  * in first row, we setup columnName, let's say three column, then set thier name: id, name, status
- * then we add data into folowing row as long as it doesn't exceed maxRows limitation
+ * then we add data into folowing row as long as it doesn't exceed MAX_ROWS limitation
  * 
  * first row know as columnNames[index]
  * { id, name, status }
  * 
- * following row known as dataRow[number of row][column's index]
+ * following row known as dataRows[number of row][column's index]
  * {
  * 	{ 1001, Jan, 1 },
  * 	{ 1002, John, 0 }
@@ -103,11 +103,11 @@ void printHeader(string title) {
 
 void setupColumns() {
 	cout << "Define number of columns (max 10): ";
-	cin >> columnCount;
+	cin >> COLUMN_COUNT;
 	cin.ignore();	// Clear newline character from input buffer
 	cout << endl;
 
-	for (int i = 0; i < columnCount; i++) {
+	for (int i = 0; i < COLUMN_COUNT; i++) {
 		cout << "Enter column " << (i + 1) << " name: ";
 		getline(cin, columnNames[i]);
 	}
@@ -116,10 +116,10 @@ void setupColumns() {
 }
 
 void printInsertRowInterface() {
-	for(int i = 0; i < columnCount; i++) {
+	for(int i = 0; i < COLUMN_COUNT; i++) {
 		cout << "Enter " << columnNames[i] << ": ";
-		getline(cin, dataRow[rowCount][i]);
+		getline(cin, dataRows[ROW_COUNT][i]);
 	}
-	rowCount++;
+	ROW_COUNT++;
 	cout << "Row inserted successfully." << endl;
 }
