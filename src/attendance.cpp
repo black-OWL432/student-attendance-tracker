@@ -5,8 +5,8 @@
  * Tutorial Class: TT1L/TT3L
  * Trimester: 2530
  * 
- * Member 1: 252UC254Q2	WILLIAM TAN		william.tan@student.mmu.edu.my			011-2746 8433
- * Member 2: 252UC254RG	HOONG ZHEN YI	.....@student.mmu.edu.my			012-945 6377
+ * Member 1: 252UC254Q2	WILLIAM TAN		william.tan@student.mmu.edu.my		011-2746 8433
+ * Member 2: 252UC254RG	HOONG ZHEN YI	HOONG.ZHEN.YI@student.mmu.edu.my	012-945 6377
  * Member 3: 252UC254YW	LEE CHONG CHUN	lee.chong.chun1@student.mmu.edu.my	019-646 2399
  * Member 4: 253UC2565E	SHAAN VINAAYAK	shaan.vinaayak@student.mmu.edu.my	016-930-2705
  * 
@@ -31,11 +31,13 @@ const string singleLine(DIVIDER_SIZE, '-');
 const int MAX_ROWS = 100;
 const int MAX_COLUMNS = 10;
 
+
+//Arrays
 string sheetName;
 string columnNames[MAX_COLUMNS];
 string dataRows[MAX_ROWS][MAX_COLUMNS];
 
-int COLUMN_COUNT;
+int COLUMN_COUNT = 0;
 int ROW_COUNT = 0;
 
 // Function declare
@@ -45,7 +47,7 @@ void printInsertRowInterface();
 
 /**
  * Concept explaination
- * in first row, we setup columnName, let's say three column, then set thier name: id, name, status
+ * in first row, we setup columnName, let's say three column, then set their name: id, name, status
  * then we add data into folowing row as long as it doesn't exceed MAX_ROWS limitation
  * 
  * first row know as columnNames[index]
@@ -107,6 +109,10 @@ void setupColumns() {
 	cin.ignore();	// Clear newline character from input buffer
 	cout << endl;
 
+	//clamp to a valid range...
+	if(COLUMN_COUNT<1) COLUMN_COUNT=1;
+	if(COLUMN_COUNT>MAX_COLUMNS)COLUMN_COUNT=MAX_COLUMNS;
+
 	for (int i = 0; i < COLUMN_COUNT; i++) {
 		cout << "Enter column " << (i + 1) << " name: ";
 		getline(cin, columnNames[i]);
@@ -116,6 +122,14 @@ void setupColumns() {
 }
 
 void printInsertRowInterface() {
+	// use to avoid overflowing storage
+	if(ROW_COUNT>=MAX_ROWS){
+		cout<<"Error: maximum number of rows reached."<<endl;
+		return;
+
+	}
+
+
 	for(int i = 0; i < COLUMN_COUNT; i++) {
 		cout << "Enter " << columnNames[i] << ": ";
 		getline(cin, dataRows[ROW_COUNT][i]);
