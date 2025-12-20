@@ -31,8 +31,7 @@ const string singleLine(DIVIDER_SIZE, '-');
 const int MAX_ROWS = 100;
 const int MAX_COLUMNS = 10;
 
-
-//Arrays
+// Arrays
 string sheetName;
 string columnNames[MAX_COLUMNS];
 string dataRows[MAX_ROWS][MAX_COLUMNS];
@@ -65,7 +64,8 @@ void printInsertRowInterface();
  * 1002,John,0
  */
 
-int main() {
+int main()
+{
 	int choice;
 
 	printHeader("");
@@ -111,7 +111,8 @@ int main() {
 /**
  * Print initial header if arg is empty string, else print custom header
  */
-void printHeader(string title) {
+void printHeader(string title)
+{
 	string content, divider;
 
 	if (title.empty()) {
@@ -127,37 +128,38 @@ void printHeader(string title) {
 	cout << divider << endl << endl;
 }
 
-void setupColumns() {
+void setupColumns()
+{
 	cout << "Define number of columns (max 10): ";
 	cin >> COLUMN_COUNT;
 	cin.ignore();	// Clear newline character from input buffer
 	cout << endl;
 
-	//clamp to a valid range...
-	if(COLUMN_COUNT<1) COLUMN_COUNT=1;
-	if(COLUMN_COUNT>MAX_COLUMNS)COLUMN_COUNT=MAX_COLUMNS;
+	// clamp to a valid range...
+	if (COLUMN_COUNT < 1) COLUMN_COUNT = 1;
+	if (COLUMN_COUNT > MAX_COLUMNS) COLUMN_COUNT = MAX_COLUMNS;
 
 	for (int i = 0; i < COLUMN_COUNT; i++) {
-		cout << "Enter column " << (i + 1) << " name: ";
+		cout << "Enter column " << ++i << " name: ";
 		getline(cin, columnNames[i]);
 	}
 
 	cout << endl << "Sheet structure created successfully." << endl << endl;
 }
 
-void printInsertRowInterface() {
+void printInsertRowInterface()
+{
 	// use to avoid overflowing storage
-	if(ROW_COUNT>=MAX_ROWS){
-		cout<<"Error: maximum number of rows reached."<<endl;
+	if(ROW_COUNT >= MAX_ROWS) {
+		cout << "Error: maximum number of rows reached." << endl;
 		return;
-
 	}
-
 
 	for(int i = 0; i < COLUMN_COUNT; i++) {
 		cout << "Enter " << columnNames[i] << ": ";
 		getline(cin, dataRows[ROW_COUNT][i]);
 	}
+
 	ROW_COUNT++;
 	cout << "Row inserted successfully." << endl;
 }
