@@ -66,9 +66,9 @@ void printInsertRowInterface();
  */
 
 int main() {
+	int choice;
 
 	printHeader("");
-
 
 	cout << "Enter attendance sheet name: ";
 	cin >> sheetName;
@@ -76,30 +76,32 @@ int main() {
 
 	setupColumns();
 
-	int choice = 0;
-	while (choice != 3) {
-		cout << "-------------------------" << endl;
+	while (choice != 0) {
+		cout << singleLine << endl;
 		cout << "1. Insert new attendance row" << endl;
 		cout << "2. View Attendance Sheet (CSV)" << endl;
-		cout << "3. Exit" << endl;
+		cout << "0. Exit" << endl;
 		cout << "Enter an option: ";
 		cin >> choice;
 		cin.ignore();
 		cout << endl;
 
-		if (choice == 1) {
-			printHeader("Insert New Attendance Row");
-			printInsertRowInterface();
-			cout << endl;
-		
-		} else if (choice == 2) {
-			printHeader("View Attendance Sheet (CSV)");
-			//TODO: print in csv format
-		
-		} else if(choice == 3) {
-			cout << "Exiting the program." << endl;
-		} else {
-			cout << "Invalid choice. Please try again." << endl << endl;
+		switch (choice) {
+			case 1:
+				printHeader("Insert New Attendance Row");
+				printInsertRowInterface();
+				cout << endl;
+				break;
+			case 2:
+				printHeader("View Attendance Sheet (CSV)");
+				// TODO: print in csv format
+				break;
+			case 0:
+				cout << "Exiting the program." << endl;
+				break;
+			default:
+				cout << "Invalid choice. Please try again." << endl << endl;
+				break;
 		}
 	}
 
