@@ -43,6 +43,7 @@ int ROW_COUNT = 0;
 void printHeader(string);
 void setupColumns();
 void printInsertRowInterface();
+void printCsvFormat();
 
 /**
  * Concept explaination
@@ -94,30 +95,11 @@ int main()
 				break;
 			case 2:
 				printHeader("View Attendance Sheet (CSV)");
-				// TODO: print in csv format
-				for (int i = 0; i < COLUMN_COUNT; i++) {
-					cout << columnNames[i];
-					if (i < COLUMN_COUNT - 1)
-					    cout << ",";
-
-				}
-				cout << endl;
-
-				//print data rows
-				for (int row = 0; row < ROW_COUNT; row++) {
-					for (int col = 0; col < COLUMN_COUNT; col++) {
-						cout << dataRows[row][col];
-						if (col < COLUMN_COUNT - 1)
-						    cout << ",";
-
-					}
-					cout << endl;
-				}
-
+				printCsvFormat();
 				cout << endl;
 				break;
 			case 0:
-				cout << "Exiting the program." << endl;
+				cout << "Exiting the program..." << endl;
 				break;
 			default:
 				cout << "Invalid choice. Please try again." << endl << endl;
@@ -182,4 +164,27 @@ void printInsertRowInterface()
 
 	ROW_COUNT++;
 	cout << "Row inserted successfully." << endl;
+}
+
+void printCsvFormat()
+{
+	// header
+	for (int i = 0; i < COLUMN_COUNT; i++) {
+		cout << columnNames[i];
+		if (i < COLUMN_COUNT - 1) {
+			cout << ",";
+		}
+	}
+	cout << endl;
+
+	// data rows
+	for (int row = 0; row < ROW_COUNT; row++) {
+		for (int col = 0; col < COLUMN_COUNT; col++) {
+			cout << dataRows[row][col];
+			if (col < COLUMN_COUNT - 1) {
+				cout << ",";
+			}
+		}
+		cout << endl;
+	}
 }
