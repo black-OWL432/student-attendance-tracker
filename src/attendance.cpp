@@ -95,6 +95,26 @@ int main()
 			case 2:
 				printHeader("View Attendance Sheet (CSV)");
 				// TODO: print in csv format
+				for (int i = 0; i < COLUMN_COUNT; i++) {
+					cout << columnNames[i];
+					if (i < COLUMN_COUNT - 1)
+					    cout << ",";
+
+				}
+				cout << endl;
+
+				//print data rows
+				for (int row = 0; row < ROW_COUNT; row++) {
+					for (int col = 0; col < COLUMN_COUNT; col++) {
+						cout << dataRows[row][col];
+						if (col < COLUMN_COUNT - 1)
+						    cout << ",";
+
+					}
+					cout << endl;
+				}
+
+				cout << endl;
 				break;
 			case 0:
 				cout << "Exiting the program." << endl;
@@ -140,7 +160,7 @@ void setupColumns()
 	if (COLUMN_COUNT > MAX_COLUMNS) COLUMN_COUNT = MAX_COLUMNS;
 
 	for (int i = 0; i < COLUMN_COUNT; i++) {
-		cout << "Enter column " << ++i << " name: ";
+		cout << "Enter column " << i + 1 << " name: ";
 		getline(cin, columnNames[i]);
 	}
 
