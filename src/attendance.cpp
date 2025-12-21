@@ -66,7 +66,7 @@ void printInsertRowInterface();
 
 int main()
 {
-	int choice;
+	int choice = -1;
 
 	printHeader("");
 
