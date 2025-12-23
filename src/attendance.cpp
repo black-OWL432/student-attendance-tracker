@@ -34,6 +34,7 @@ const int MAX_COLUMNS = 10;
 // Arrays
 string sheetName;
 string columnNames[MAX_COLUMNS];
+string columnTypes[MAX_COLUMNS];
 string dataRows[MAX_ROWS][MAX_COLUMNS];
 
 int COLUMN_COUNT = 0;
@@ -110,9 +111,7 @@ int main()
 	return 0;
 }
 
-/**
- * Print initial header if arg is empty string, else print custom header
- */
+// Print initial header if arg is empty string, else print custom header
 void printHeader(string title)
 {
 	string content, divider;
@@ -151,6 +150,19 @@ void setupColumns()
 	for (int i = 0; i < COLUMN_COUNT; i++) {
 		cout << "Enter column " << i + 1 << " name: ";
 		getline(cin, columnNames[i]);
+
+		string tmp;
+		while (true) {
+			cout << "Enter type of " << columnNames[i] << " (int/string/bool): ";
+			getline(cin, tmp);
+			if (tmp != "int" && tmp != "string" && tmp != "bool") {
+				cout << "Invalid input. Please enter a valid type." << endl;
+				continue;
+			}
+			columnTypes[i] = tmp;
+			break;
+		}
+		cout << endl;
 	}
 
 	cout << endl << "Sheet structure created successfully." << endl << endl;
@@ -165,8 +177,32 @@ void printInsertRowInterface()
 	}
 
 	for(int i = 0; i < COLUMN_COUNT; i++) {
-		cout << "Enter " << columnNames[i] << ": ";
-		getline(cin, dataRows[ROW_COUNT][i]);
+		cout << "Enter " << columnNames[i] << " (" << columnTypes[i] << "): ";
+		// Since dataRows is string array, we need to check type manually
+		while (true) {
+			if (columnTypes[i] == "int") {
+				int tmp;
+				while (!(cin >> tmp)) {
+					cin.clear();
+					cin.ignore(1000, '\n');
+					cout << "Invalid input. Please enter an integer: ";
+				}
+				dataRows[ROW_COUNT][i] = to_string(tmp);
+				break;
+			} else if (columnTypes[i] == "bool") {
+				bool tmp;
+				while (!(cin >> tmp)) {
+					cin.clear();
+					cin.ignore(1000, '\n');
+					cout << "Invalid input. Please enter a boolean (0/1): ";
+				}
+				dataRows[ROW_COUNT][i] = to_string(tmp);
+				break;
+			} else { // string could be ANY, so lowest priority
+				getline(cin, dataRows[ROW_COUNT][i]);
+				break;
+			}
+		}
 	}
 
 	ROW_COUNT++;
