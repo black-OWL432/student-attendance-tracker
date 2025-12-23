@@ -5,18 +5,18 @@
  * Tutorial Class: TT1L/TT3L
  * Trimester: 2530
  * 
- * Member 1: 252UC254Q2	WILLIAM TAN		william.tan@student.mmu.edu.my		011-2746 8433
- * Member 2: 252UC254RG	HOONG ZHEN YI	HOONG.ZHEN.YI@student.mmu.edu.my	012-945 6377
- * Member 3: 252UC254YW	LEE CHONG CHUN	lee.chong.chun1@student.mmu.edu.my	019-646 2399
- * Member 4: 253UC2565E	SHAAN VINAAYAK	shaan.vinaayak@student.mmu.edu.my	016-930-2705
+ * Member 1: 252UC254Q2	WILLIAM TAN		william.tan@student.mmu.edu.my		011-2746 8433	William-0201
+ * Member 2: 252UC254RG	HOONG ZHEN YI	HOONG.ZHEN.YI@student.mmu.edu.my	012-945 6377	zhenyii
+ * Member 3: 252UC254YW	LEE CHONG CHUN	lee.chong.chun1@student.mmu.edu.my	019-646 2399	black-OWL432
+ * Member 4: 253UC2565E	SHAAN VINAAYAK	shaan.vinaayak@student.mmu.edu.my	016-930 2705	CandyVirtue
  * 
  * ******************************************************************************************
  * 
  * Task distribution
- * Member 1:
- * Member 2:
- * Member 3:
- * Member 4:
+ * Member 1: printHeader(), setupColumns()
+ * Member 2: insertDataRow()
+ * Member 3: error handling, code reviewer
+ * Member 4: printCsvFormat()
  */
 
 #include <iostream>
@@ -24,6 +24,7 @@
 
 using namespace std;
 
+// Global constants
 const int DIVIDER_SIZE = 40;
 const string doubleLine(DIVIDER_SIZE, '=');
 const string singleLine(DIVIDER_SIZE, '-');
@@ -31,7 +32,7 @@ const string singleLine(DIVIDER_SIZE, '-');
 const int MAX_ROWS = 100;
 const int MAX_COLUMNS = 10;
 
-// Arrays
+// Global variables
 string sheetName;
 string columnNames[MAX_COLUMNS];
 string columnTypes[MAX_COLUMNS];
@@ -43,7 +44,7 @@ int ROW_COUNT = 0;
 // Function declare
 void printHeader(string);
 void setupColumns();
-void printInsertRowInterface();
+void insertDataRow();
 void printCsvFormat();
 
 /**
@@ -91,7 +92,7 @@ int main()
 		switch (choice) {
 			case 1:
 				printHeader("Insert New Attendance Row");
-				printInsertRowInterface();
+				insertDataRow();
 				cout << endl;
 				break;
 			case 2:
@@ -129,6 +130,7 @@ void printHeader(string title)
 	cout << divider << endl << endl;
 }
 
+// Initialize columnName and columnType
 void setupColumns()
 {
 	int tmp;
@@ -168,7 +170,8 @@ void setupColumns()
 	cout << endl << "Sheet structure created successfully." << endl << endl;
 }
 
-void printInsertRowInterface()
+// Add new row
+void insertDataRow()
 {
 	// use to avoid overflowing storage
 	if(ROW_COUNT >= MAX_ROWS) {
@@ -209,6 +212,7 @@ void printInsertRowInterface()
 	cout << "Row inserted successfully." << endl;
 }
 
+// Print data in csv format
 void printCsvFormat()
 {
 	// header
