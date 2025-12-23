@@ -132,14 +132,21 @@ void printHeader(string title)
 
 void setupColumns()
 {
-	cout << "Define number of columns (max 10): ";
-	cin >> COLUMN_COUNT;
-	cin.ignore();	// Clear newline character from input buffer
+	int tmp;
+	while (true) {
+		cout << "Define number of columns (max 10): ";
+		cin >> tmp;
+		if (cin.fail() || tmp < 1 || tmp > 10) {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Invalid input. Please enter a number between 1 and 10." << endl;
+			continue;
+		}
+		COLUMN_COUNT = tmp;
+		break;
+	}
+	cin.ignore();
 	cout << endl;
-
-	// clamp to a valid range...
-	if (COLUMN_COUNT < 1) COLUMN_COUNT = 1;
-	if (COLUMN_COUNT > MAX_COLUMNS) COLUMN_COUNT = MAX_COLUMNS;
 
 	for (int i = 0; i < COLUMN_COUNT; i++) {
 		cout << "Enter column " << i + 1 << " name: ";
