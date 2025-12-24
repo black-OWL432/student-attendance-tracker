@@ -202,7 +202,16 @@ void insertDataRow()
 				dataRows[ROW_COUNT][i] = to_string(tmp);
 				break;
 			} else { // string could be ANY, so lowest priority
-				getline(cin, dataRows[ROW_COUNT][i]);
+				string tmp;
+				while (true) {
+					getline(cin, tmp);
+					if (tmp.empty()) {
+						cout << "Invalid input. Please enter a valid string: ";
+						continue;
+					}
+					dataRows[ROW_COUNT][i] = tmp;
+					break;
+				}
 				break;
 			}
 		}
