@@ -139,7 +139,7 @@ void setupColumns()
 		cin >> tmp;
 		if (cin.fail() || tmp < 1 || tmp > 10) {
 			cin.clear();
-			cin.ignore(1000, '\n');
+			cin.ignore();
 			cout << "Invalid input. Please enter a number between 1 and 10." << endl;
 			continue;
 		}
@@ -187,18 +187,20 @@ void insertDataRow()
 				int tmp;
 				while (!(cin >> tmp)) {
 					cin.clear();
-					cin.ignore(1000, '\n');
+					cin.ignore();
 					cout << "Invalid input. Please enter an integer: ";
 				}
+				cin.ignore();
 				dataRows[ROW_COUNT][i] = to_string(tmp);
 				break;
 			} else if (columnTypes[i] == "bool") {
 				bool tmp;
 				while (!(cin >> tmp)) {
 					cin.clear();
-					cin.ignore(1000, '\n');
+					cin.ignore();
 					cout << "Invalid input. Please enter a boolean (0/1): ";
 				}
+				cin.ignore();
 				dataRows[ROW_COUNT][i] = to_string(tmp);
 				break;
 			} else { // string could be ANY, so lowest priority
