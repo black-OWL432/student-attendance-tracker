@@ -44,7 +44,11 @@ int ROW_COUNT = 0;
 // Function declare
 void printHeader(string);
 void setupColumns();
+string getInputByType(int);
+int searchRowIndex();
 void insertDataRow();
+void updateDataRow();
+void deleteDataRow();
 void printCsvFormat();
 
 /**
@@ -82,7 +86,9 @@ int main()
 	while (choice != 0) {
 		cout << singleLine << endl;
 		cout << "1. Insert new attendance row" << endl;
-		cout << "2. View Attendance Sheet (CSV)" << endl;
+		cout << "2. Update attendance row" << endl;
+		cout << "3. Delete attendance row" << endl;
+		cout << "4. View Attendance Sheet (CSV)" << endl;
 		cout << "0. Exit" << endl;
 		cout << "Enter an option: ";
 		cin >> choice;
@@ -96,6 +102,16 @@ int main()
 				cout << endl;
 				break;
 			case 2:
+				printHeader("Update Attendance Row");
+				updateDataRow();
+				cout << endl;
+				break;
+			case 3:
+				printHeader("Delete Attendance Row");
+				deleteDataRow();
+				cout << endl;
+				break;
+			case 4:
 				printHeader("View Attendance Sheet (CSV)");
 				printCsvFormat();
 				cout << endl;
@@ -180,42 +196,7 @@ void insertDataRow()
 
 	for(int i = 0; i < COLUMN_COUNT; i++) {
 		cout << "Enter " << columnNames[i] << " (" << columnTypes[i] << "): ";
-		// Since dataRows is string array, we need to check type manually
-		while (true) {
-			if (columnTypes[i] == "int") {
-				int tmp;
-				while (!(cin >> tmp)) {
-					cin.clear();
-					cin.ignore(1000, '\n');
-					cout << "Invalid input. Please enter an integer: ";
-				}
-				cin.ignore(1000, '\n');
-				newRow[i] = to_string(tmp);
-				break;
-			} else if (columnTypes[i] == "bool") {
-				bool tmp;
-				while (!(cin >> tmp)) {
-					cin.clear();
-					cin.ignore(1000, '\n');
-					cout << "Invalid input. Please enter a boolean (0/1): ";
-				}
-				cin.ignore();
-				newRow[i] = to_string(tmp);
-				break;
-			} else { // string could be ANY, so lowest priority
-				string tmp;
-				while (true) {
-					getline(cin, tmp);
-					if (tmp.empty()) {
-						cout << "Invalid input. Please enter a valid string: ";
-						continue;
-					}
-					newRow[i] = tmp;
-					break;
-				}
-				break;
-			}
-		}
+		newRow[i] = getInputByType(i);
 	}
 
 	dataRows.push_back(newRow);
@@ -245,4 +226,148 @@ void printCsvFormat()
 		}
 		cout << endl;
 	}
+}
+
+// Search for a row index
+int searchRowIndex()
+{
+	if (ROW_COUNT == 0) {
+		cout << "No data available." << endl;
+		return -1;
+	}
+
+	// Search from
+	cout << "Columns:" << endl;
+	cout << "0. Exit" << endl;
+	for (int i = 0; i < COLUMN_COUNT; i++) {
+		cout << i + 1 << ". " << columnNames[i] << endl;
+	}
+	int index;
+	while (true) {
+		cout << "Choose a column index to search from: ";
+		cin >> index;
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Invalid input. Please enter a number." << endl;
+			continue;
+		}
+		if (index == 0) return -1;
+		if (index < 1 || index > COLUMN_COUNT) {
+			cout << "Invalid column index." << endl;
+			continue;
+		}
+		break;
+	}
+	index--;
+	cin.ignore(1000, '\n');
+
+	// Search
+	string target;
+	cout << "Enter target value to search for in \"" << columnNames[index] << "\": ";
+	getline(cin, target);
+
+	// Search result
+	vector<int> matchIndices;
+	cout << endl << "Search Results:" << endl;
+	for (int i = 0; i < ROW_COUNT; i++) {
+		if (dataRows[i][index] == target) {
+			matchIndices.push_back(i);
+			cout << matchIndices.size() << ". ";
+			for (int j = 0; j < COLUMN_COUNT; j++) {
+				cout << dataRows[i][j] << (j < COLUMN_COUNT - 1 ? ", " : "");
+			}
+			cout << endl;
+		}
+	}
+
+	if (matchIndices.empty()) {
+		cout << "No matching records found." << endl;
+		return -1;
+	}
+
+	// return if only one search result
+	if (matchIndices.size() == 1) {
+		return matchIndices[0];
+	}
+
+	// Choose result
+	int resultIndex;
+	while (true) {
+		cout << endl << "Choose a result index: ";
+		cin >> resultIndex;
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Invalid input. Please enter a number." << endl;
+			continue;
+		}
+		if (resultIndex < 1 || resultIndex > (int)matchIndices.size()) {
+			cout << "Invalid result index." << endl;
+			continue;
+		}
+		break;
+	}
+	int rowIndex = matchIndices[resultIndex - 1];
+	cin.ignore(1000, '\n');
+
+	return rowIndex;
+}
+
+// Get input from user based on column type
+string getInputByType(int index)
+{
+	// All types are string, so we need to check type manually
+	while (true) {
+		if (columnTypes[index] == "int") {
+			int tmp;
+			if (cin >> tmp) {
+				cin.ignore(1000, '\n');
+				return to_string(tmp);
+			} else {
+				cin.clear();
+				cin.ignore(1000, '\n');
+				cout << "Invalid input. Please enter an integer: ";
+			}
+		} else if (columnTypes[index] == "bool") {
+			bool tmp;
+			if (cin >> tmp) {
+				cin.ignore(1000, '\n');
+				return to_string(tmp);
+			} else {
+				cin.clear();
+				cin.ignore(1000, '\n');
+				cout << "Invalid input. Please enter a boolean (0/1): ";
+			}
+		} else { // string
+			string tmp;
+			getline(cin, tmp);
+			if (tmp.empty()) {
+				cout << "Invalid input. Please enter a valid string: ";
+				continue;
+			}
+			return tmp;
+		}
+	}
+}
+
+// Update info in existing row
+void updateDataRow()
+{
+	int rowIndex = searchRowIndex();
+	if (rowIndex == -1) return;
+
+	// Update logic
+	cout << endl << "Updating Row " << rowIndex + 1 << ":" << endl;
+	for (int i = 0; i < COLUMN_COUNT; i++) {
+		cout << "Enter new " << columnNames[i] << " (" << columnTypes[i] << ") [current: " << dataRows[rowIndex][i] << "]: ";
+		dataRows[rowIndex][i] = getInputByType(i);
+	}
+	cout << "Row updated successfully." << endl;
+}
+
+// Delete existing row
+void deleteDataRow()
+{
+	// TODO
 }
