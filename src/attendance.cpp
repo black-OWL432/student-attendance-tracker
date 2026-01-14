@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -29,14 +30,13 @@ const int DIVIDER_SIZE = 40;
 const string doubleLine(DIVIDER_SIZE, '=');
 const string singleLine(DIVIDER_SIZE, '-');
 
-const int MAX_ROWS = 100;
 const int MAX_COLUMNS = 10;
 
 // Global variables
 string sheetName;
-string columnNames[MAX_COLUMNS];
-string columnTypes[MAX_COLUMNS];
-string dataRows[MAX_ROWS][MAX_COLUMNS];
+vector<string> columnNames;
+vector<string> columnTypes;
+vector<vector<string>> dataRows;
 
 int COLUMN_COUNT = 0;
 int ROW_COUNT = 0;
@@ -149,6 +149,9 @@ void setupColumns()
 	cin.ignore(1000, '\n');
 	cout << endl;
 
+	columnNames.resize(COLUMN_COUNT);
+	columnTypes.resize(COLUMN_COUNT);
+
 	for (int i = 0; i < COLUMN_COUNT; i++) {
 		cout << "Enter column " << i + 1 << " name: ";
 		getline(cin, columnNames[i]);
@@ -173,11 +176,7 @@ void setupColumns()
 // Add new row
 void insertDataRow()
 {
-	// use to avoid overflowing storage
-	if(ROW_COUNT >= MAX_ROWS) {
-		cout << "Error: maximum number of rows reached." << endl;
-		return;
-	}
+	vector<string> newRow(COLUMN_COUNT);
 
 	for(int i = 0; i < COLUMN_COUNT; i++) {
 		cout << "Enter " << columnNames[i] << " (" << columnTypes[i] << "): ";
@@ -191,7 +190,7 @@ void insertDataRow()
 					cout << "Invalid input. Please enter an integer: ";
 				}
 				cin.ignore(1000, '\n');
-				dataRows[ROW_COUNT][i] = to_string(tmp);
+				newRow[i] = to_string(tmp);
 				break;
 			} else if (columnTypes[i] == "bool") {
 				bool tmp;
@@ -201,7 +200,7 @@ void insertDataRow()
 					cout << "Invalid input. Please enter a boolean (0/1): ";
 				}
 				cin.ignore();
-				dataRows[ROW_COUNT][i] = to_string(tmp);
+				newRow[i] = to_string(tmp);
 				break;
 			} else { // string could be ANY, so lowest priority
 				string tmp;
@@ -211,7 +210,7 @@ void insertDataRow()
 						cout << "Invalid input. Please enter a valid string: ";
 						continue;
 					}
-					dataRows[ROW_COUNT][i] = tmp;
+					newRow[i] = tmp;
 					break;
 				}
 				break;
@@ -219,6 +218,7 @@ void insertDataRow()
 		}
 	}
 
+	dataRows.push_back(newRow);
 	ROW_COUNT++;
 	cout << "Row inserted successfully." << endl;
 }
