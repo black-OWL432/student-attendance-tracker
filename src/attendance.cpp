@@ -22,6 +22,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -41,8 +43,11 @@ vector<vector<string>> dataRows;
 int COLUMN_COUNT = 0;
 int ROW_COUNT = 0;
 
+string schoolTerm;
+
 // Function declare
 void printHeader(string);
+void loadFromFile();
 void setupColumns();
 string getInputByType(int);
 int searchRowIndex();
@@ -50,6 +55,7 @@ void insertDataRow();
 void updateDataRow();
 void deleteDataRow();
 void printCsvFormat();
+void saveToFile();
 
 /**
  * Concept explaination
@@ -77,11 +83,16 @@ int main()
 
 	printHeader("");
 
-	cout << "Enter attendance sheet name: ";
-	cin >> sheetName;
-	cout << "Attendance sheet \"" << sheetName << "\" created successfully." << endl;
+	cout << "Create School Term (Database)"<< endl;
+	cout << singleLine << endl;
+	cout << "Enter School Term: ";
+	cin.ignore();
+	getline(cin, schoolTerm);
+	cout << "Database \"" << schoolTerm << "\" created and loaded." << endl << endl;
+	
+	cout << "Reading attendance data from file..." << endl;
+	loadFromFile();
 
-	setupColumns();
 
 	while (choice != 0) {
 		cout << singleLine << endl;
@@ -125,6 +136,9 @@ int main()
 		}
 	}
 
+	if (ROW_COUNT > 0) {
+		saveToFile();
+	} 
 	return 0;
 }
 
@@ -134,7 +148,7 @@ void printHeader(string title)
 	string content, divider;
 
 	if (title.empty()) {
-		content = " STUDENT ATTENDANCE TRACKER - MILESTONE 1 ";
+		content = " STUDENT ATTENDANCE TRACKER - MILESTONE 2 ";
 		divider = doubleLine;
 	} else {
 		content = title;
@@ -144,6 +158,47 @@ void printHeader(string title)
 	cout << divider << endl;
 	cout << content << endl;
 	cout << divider << endl << endl;
+}
+
+void loadFromFile()
+{
+	string filename;
+	cout << "Enter the attendance CSV filename to load: ";
+	cin >> filename;
+
+	ifstream inputFile(filename);
+	if (!inputFile.is_open()) {
+		cout << "Error: Could not open file " << filename << endl;
+		return;
+	}
+
+columnNames.clear();
+dataRows.clear();
+ROW_COUNT = 0;
+
+string line,word;
+
+if (getline(inputFile, line)) {
+	stringstream ss(line);
+	while (getline(ss, word, ',')) {
+		columnNames.push_back(word);
+	}
+	COLUMN_COUNT = columnNames.size();
+	columnTypes.assign(COLUMN_COUNT, "string");
+}
+
+while (getline(inputFile, line)) {
+	stringstream ss(line);
+	vector<string> row;
+	while (getline(ss, word, ',')) {
+		row.push_back(word);
+	}
+	dataRows.push_back(row);
+	ROW_COUNT++;
+}
+
+	inputFile.close();
+	cout << "Successfully loaded: " << filename << endl;
 }
 
 // Initialize columnName and columnType
@@ -370,4 +425,36 @@ void updateDataRow()
 void deleteDataRow()
 {
 	// TODO
+}
+
+
+// Save data to file
+void saveToFile()
+{
+	string outFileName = "Week1_Attendance_Updated.csv";
+	ofstream outputFile(outFileName);
+
+	if (outputFile.is_open()) {
+		// Write header
+		for (int i = 0; i < COLUMN_COUNT; i++) {
+			outputFile << columnNames[i] << (i < COLUMN_COUNT - 1 ? "," : "");
+		}
+		outputFile << endl;
+
+		// Write data rows
+		for (int row = 0; row < ROW_COUNT; row++) {
+			for (int col = 0; col < COLUMN_COUNT; col++) {
+				outputFile << dataRows[row][col] << (col < COLUMN_COUNT - 1 ? "," : "");
+			}
+			outputFile << endl;
+		}
+
+		outputFile.close();
+		cout <<"------------------------------------------------------" << endl;
+		cout << "Writing updated sheet to output file.... " << endl;
+		cout << "Output saved as: " << outFileName << endl;
+		cout <<"------------------------------------------------------" << endl;
+	} else {
+		cout << "Error: Could not create output file "<< endl;
+	}
 }
