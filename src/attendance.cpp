@@ -86,7 +86,6 @@ int main()
 	cout << "Create School Term (Database)"<< endl;
 	cout << singleLine << endl;
 	cout << "Enter School Term: ";
-	cin.ignore();
 	getline(cin, schoolTerm);
 	cout << "Database \"" << schoolTerm << "\" created and loaded." << endl << endl;
 	
