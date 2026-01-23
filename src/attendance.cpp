@@ -56,6 +56,7 @@ void updateDataRow();
 void deleteDataRow();
 void printCsvFormat();
 void saveToFile();
+void countRows();
 
 /**
  * Concept explaination
@@ -99,6 +100,7 @@ int main()
 		cout << "2. Update attendance row" << endl;
 		cout << "3. Delete attendance row" << endl;
 		cout << "4. View Attendance Sheet (CSV)" << endl;
+		cout << "5. Count Rows" << endl;
 		cout << "0. Exit" << endl;
 		cout << "Enter an option: ";
 		cin >> choice;
@@ -126,6 +128,11 @@ int main()
 				printCsvFormat();
 				cout << endl;
 				break;
+			case 5:
+                printHeader("Count Rows");
+                countRows();
+                cout << endl;
+                break;	
 			case 0:
 				cout << "Exiting the program..." << endl;
 				break;
@@ -508,4 +515,11 @@ void saveToFile()
 	} else {
 		cout << "Error: Could not create output file "<< endl;
 	}
+
+}
+
+// Count the number of rows
+void countRows()
+{
+	cout << " Number of rows: "<< ROW_COUNT << endl ;
 }
