@@ -175,7 +175,8 @@ void loadFromFile()
 	ifstream inputFile(filename);
 	if (!inputFile.is_open()) {
 		cout << "Error: Could not open file " << filename << endl;
-		return;
+		cout << "The program will now exit." << endl;
+        exit(1);
 	}
 
 columnNames.clear();
@@ -253,16 +254,42 @@ void setupColumns()
 // Add new row
 void insertDataRow()
 {
-	vector<string> newRow(COLUMN_COUNT);
+		// 1.Student ID 
+		int idInput;
+		cout << "Enter Student ID : ";
+		while(!(cin >> idInput)) {
+			cout << "Error: Invalid INT value. Please enter a number." << endl;
+			cin.clear();
+			cin.ignore(1000, '\n');
+		}
+		string idStr = to_string(idInput);
+		cin.ignore(1000, '\n'); // Clean buffer
 
-	for(int i = 0; i < COLUMN_COUNT; i++) {
-		cout << "Enter " << columnNames[i] << " (" << columnTypes[i] << "): ";
-		newRow[i] = getInputByType(i);
-	}
+		// 2. Get Student Name
+		string nameInput;
+		cout << "Enter Student Name: ";
+		getline(cin, nameInput);
 
-	dataRows.push_back(newRow);
-	ROW_COUNT++;
-	cout << "Row inserted successfully." << endl;
+		// 3. Get Status 
+		int statusChoice;
+		cout << "Enter Status (Present: 1, Absent: 0): ";
+		while(!(cin >> statusChoice) || (statusChoice != 0 && statusChoice != 1)) {
+			cout << "Invalid! (Present: 1, Absent: 0): ";
+			cin.clear();
+			cin.ignore(1000, '\n');
+		}
+		string statusStr = (statusChoice == 1) ? "Present" : "Absent";
+
+		// 4.Put the data into a row and add it to the list
+		vector<string> newRow;
+		newRow.push_back(idStr);     // Column 0
+		newRow.push_back(nameInput); // Column 1
+		newRow.push_back(statusStr); // Column 2
+
+		dataRows.push_back(newRow);  // Add to the main database
+		ROW_COUNT++;                 
+
+		cout << "\nRow inserted successfully" << endl;
 }
 
 // Print data in csv format
@@ -472,10 +499,6 @@ void deleteDataRow()
 
 	cout << "Updated Sheet:" << endl;
 	printCsvFormat();
-
-
-
-
 
 	
 }
