@@ -74,6 +74,13 @@ void countRows();
  * id,name,status		<- header, columnName
  * 1001,Jan,1			<- data content, 
  * 1002,John,0
+ * 
+ * In file, we need to store columnType so we can restore the original type when reading from file
+ * so the format will be: columnName|columnType, using | as out delimiter
+ * Example format in file:
+ * id|int,name|string,status|bool
+ * 1001,John,1
+ * 1002,Jane,0
  */
 
 int main()
