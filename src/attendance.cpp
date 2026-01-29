@@ -433,42 +433,16 @@ void updateDataRow()
 	cout << "Row updated successfully." << endl;
 }
 
-// Delete existing row (DONE)
+// Delete existing row
 void deleteDataRow()
 {
-	if (ROW_COUNT == 0) {
-		cout << "No data available." << endl;
-		return;
-	}
+	int rowIndex = searchRowIndex();
+	if (rowIndex == -1) return;
 
-	string targetID;
-	cout << "Enter StudentID to delete: ";
-
-	getline(cin, targetID);
-
-	int rowIndex = -1;
-
-	// student id is assumed to be column 0
-	for (int i =0; i <ROW_COUNT; i++) {
-		if (dataRows[i][0] ==targetID) {
-			rowIndex =i;
-			break;
-		}
-	}
-
-	if (rowIndex ==-1) {
-		cout << "Error: StudentID does not exist." << endl;
-		return;
-	}
-
-	// delete the row
+	// Delete logic
 	dataRows.erase(dataRows.begin() + rowIndex);
 	ROW_COUNT--;
-
-	cout << "Row deleted successfully." << endl << endl;
-	cout << "Updated Sheet:" << endl;
-
-	printCsvFormat(cout);
+	cout << "Row deleted successfully." << endl;
 }
 
 // Save data to file
