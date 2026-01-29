@@ -341,7 +341,8 @@ int searchRowIndex()
 	cout << "Enter target value to search for in \"" << columnNames[index] << "\": ";
 	getline(cin, target);
 
-	// Search result
+	// Linear search from a sigle column, since no sorting were done.
+	// Time complexity: O(n)
 	vector<int> matchIndices;
 	cout << endl << "Search Results:" << endl;
 	for (int i = 0; i < ROW_COUNT; i++) {
