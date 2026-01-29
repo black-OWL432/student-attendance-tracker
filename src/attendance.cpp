@@ -178,30 +178,30 @@ void loadFromFile()
 		return;
 	}
 
-columnNames.clear();
-dataRows.clear();
-ROW_COUNT = 0;
+	columnNames.clear();
+	dataRows.clear();
+	ROW_COUNT = 0;
 
-string line,word;
+	string line,word;
 
-if (getline(inputFile, line)) {
-	stringstream ss(line);
-	while (getline(ss, word, ',')) {
-		columnNames.push_back(word);
+	if (getline(inputFile, line)) {
+		stringstream ss(line);
+		while (getline(ss, word, ',')) {
+			columnNames.push_back(word);
+		}
+		COLUMN_COUNT = columnNames.size();
+		columnTypes.assign(COLUMN_COUNT, "string");
 	}
-	COLUMN_COUNT = columnNames.size();
-	columnTypes.assign(COLUMN_COUNT, "string");
-}
 
-while (getline(inputFile, line)) {
-	stringstream ss(line);
-	vector<string> row;
-	while (getline(ss, word, ',')) {
-		row.push_back(word);
+	while (getline(inputFile, line)) {
+		stringstream ss(line);
+		vector<string> row;
+		while (getline(ss, word, ',')) {
+			row.push_back(word);
+		}
+		dataRows.push_back(row);
+		ROW_COUNT++;
 	}
-	dataRows.push_back(row);
-	ROW_COUNT++;
-}
 
 	inputFile.close();
 	cout << "Successfully loaded: " << filename << endl;
@@ -427,13 +427,9 @@ void updateDataRow()
 	cout << "Row updated successfully." << endl;
 }
 
-
-
 // Delete existing row (DONE)
 void deleteDataRow()
 {
-	
-
 	if (ROW_COUNT == 0) {
 		cout << "No data available." << endl;
 		return;
@@ -442,19 +438,14 @@ void deleteDataRow()
 	string targetID;
 	cout << "Enter StudentID to delete: ";
 
-
-
 	getline(cin, targetID);
 
 	int rowIndex = -1;
 
 	// student id is assumed to be column 0
 	for (int i =0; i <ROW_COUNT; i++) {
-
 		if (dataRows[i][0] ==targetID) {
 			rowIndex =i;
-
-
 			break;
 		}
 	}
@@ -469,22 +460,10 @@ void deleteDataRow()
 	ROW_COUNT--;
 
 	cout << "Row deleted successfully." << endl << endl;
-
 	cout << "Updated Sheet:" << endl;
+
 	printCsvFormat();
-
-
-
-
-
-	
 }
-
-
-
-
-
-
 
 // Save data to file
 void saveToFile()
