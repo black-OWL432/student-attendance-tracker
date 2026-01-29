@@ -52,7 +52,7 @@ int searchRowIndex();
 void insertDataRow();
 void updateDataRow();
 void deleteDataRow();
-void printCsvFormat();
+void printCsvFormat(ostream& out = cout);
 void saveToFile(string);
 void countRows();
 
@@ -120,7 +120,7 @@ int main()
 				break;
 			case 4:
 				printHeader("View Attendance Sheet (CSV)");
-				printCsvFormat();
+				printCsvFormat(cout);
 				cout << endl;
 				break;
 			case 5:
@@ -267,26 +267,26 @@ void insertDataRow()
 }
 
 // Print data in csv format
-void printCsvFormat()
+void printCsvFormat(ostream& out)
 {
-	// header
+	// header with types
 	for (int i = 0; i < COLUMN_COUNT; i++) {
-		cout << columnNames[i] << "|" << columnTypes[i];
+		out << columnNames[i] << "|" << columnTypes[i];
 		if (i < COLUMN_COUNT - 1) {
-			cout << ",";
+			out << ",";
 		}
 	}
-	cout << endl;
+	out << endl;
 
 	// data rows
 	for (int row = 0; row < ROW_COUNT; row++) {
 		for (int col = 0; col < COLUMN_COUNT; col++) {
-			cout << dataRows[row][col];
+			out << dataRows[row][col];
 			if (col < COLUMN_COUNT - 1) {
-				cout << ",";
+				out << ",";
 			}
 		}
-		cout << endl;
+		out << endl;
 	}
 }
 
@@ -463,7 +463,7 @@ void deleteDataRow()
 	cout << "Row deleted successfully." << endl << endl;
 	cout << "Updated Sheet:" << endl;
 
-	printCsvFormat();
+	printCsvFormat(cout);
 }
 
 // Save data to file
@@ -472,19 +472,7 @@ void saveToFile(string fileName)
 	ofstream outputFile(fileName + ".csv");
 
 	if (outputFile.is_open()) {
-		// Write header with types
-		for (int i = 0; i < COLUMN_COUNT; i++) {
-			outputFile << columnNames[i] << "|" << columnTypes[i] << (i < COLUMN_COUNT - 1 ? "," : "");
-		}
-		outputFile << endl;
-
-		// Write data rows
-		for (int row = 0; row < ROW_COUNT; row++) {
-			for (int col = 0; col < COLUMN_COUNT; col++) {
-				outputFile << dataRows[row][col] << (col < COLUMN_COUNT - 1 ? "," : "");
-			}
-			outputFile << endl;
-		}
+		printCsvFormat(outputFile);
 
 		outputFile.close();
 		cout <<"------------------------------------------------------" << endl;
