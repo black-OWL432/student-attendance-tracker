@@ -90,10 +90,15 @@ int main()
 
 	printHeader("");
 
-	cout << "Create attendance sheet"<< endl;
+	cout << "Create School Term (Database)"<< endl;
 	cout << singleLine << endl;
-	cout << "Enter sheet name: ";
+	cout << "Enter term name: ";
 	getline(cin, fileName);
+	if (fileName.empty()) {
+		cout << "Invalid input. Please enter a valid term name." << endl;
+		return 1;
+	}
+	cout << "Database \"" << fileName << "\" created" << endl;
 	loadFromFile(fileName);
 
 	while (choice != 0) {
@@ -177,6 +182,8 @@ void loadFromFile(string filename)
 		return;
 	}
 
+	cout << "Reading attendance data from file..." << endl;
+
 	columnNames.clear();
 	columnTypes.clear();
 	dataRows.clear();
@@ -212,7 +219,7 @@ void loadFromFile(string filename)
 	}
 
 	inputFile.close();
-	cout << "Successfully loaded: " << filename << endl;
+	cout << "Successfully loaded: " << filename << ".csv" << endl;
 }
 
 // Initialize columnName and columnType
