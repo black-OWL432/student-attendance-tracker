@@ -271,7 +271,12 @@ void printCsvFormat(ostream& out)
 {
 	// header with types
 	for (int i = 0; i < COLUMN_COUNT; i++) {
-		out << columnNames[i] << "|" << columnTypes[i];
+		out << columnNames[i];
+
+		if (&out != &cout) {
+			out << "|" << columnTypes[i];
+		}
+
 		if (i < COLUMN_COUNT - 1) {
 			out << ",";
 		}
