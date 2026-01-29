@@ -43,11 +43,9 @@ vector<vector<string>> dataRows;
 int COLUMN_COUNT = 0;
 int ROW_COUNT = 0;
 
-string schoolTerm;
-
 // Function declare
 void printHeader(string);
-void loadFromFile();
+void loadFromFile(string);
 void setupColumns();
 string getInputByType(int);
 int searchRowIndex();
@@ -55,7 +53,7 @@ void insertDataRow();
 void updateDataRow();
 void deleteDataRow();
 void printCsvFormat();
-void saveToFile();
+void saveToFile(string);
 void countRows();
 
 /**
@@ -81,18 +79,15 @@ void countRows();
 int main()
 {
 	int choice = -1;
+	string fileName;
 
 	printHeader("");
 
-	cout << "Create School Term (Database)"<< endl;
+	cout << "Create attendance sheet"<< endl;
 	cout << singleLine << endl;
-	cout << "Enter School Term: ";
-	getline(cin, schoolTerm);
-	cout << "Database \"" << schoolTerm << "\" created and loaded." << endl << endl;
-	
-	cout << "Reading attendance data from file..." << endl;
-	loadFromFile();
-
+	cout << "Enter sheet name: ";
+	getline(cin, fileName);
+	loadFromFile(fileName);
 
 	while (choice != 0) {
 		cout << singleLine << endl;
@@ -143,7 +138,7 @@ int main()
 	}
 
 	if (ROW_COUNT > 0) {
-		saveToFile();
+		saveToFile(fileName);
 	} 
 	return 0;
 }
@@ -166,15 +161,12 @@ void printHeader(string title)
 	cout << divider << endl << endl;
 }
 
-void loadFromFile()
+void loadFromFile(string filename)
 {
-	string filename;
-	cout << "Enter the attendance CSV filename to load: ";
-	cin >> filename;
-
-	ifstream inputFile(filename);
+	ifstream inputFile(filename + ".csv");
 	if (!inputFile.is_open()) {
-		cout << "Error: Could not open file " << filename << endl;
+		cout << "File doesn't exist, creating new file: " << filename << ".csv" << endl;
+		setupColumns();
 		return;
 	}
 
@@ -475,10 +467,9 @@ void deleteDataRow()
 }
 
 // Save data to file
-void saveToFile()
+void saveToFile(string fileName)
 {
-	string outFileName = "Week1_Attendance_Updated.csv";
-	ofstream outputFile(outFileName);
+	ofstream outputFile(fileName + ".csv");
 
 	if (outputFile.is_open()) {
 		// Write header with types
@@ -498,7 +489,7 @@ void saveToFile()
 		outputFile.close();
 		cout <<"------------------------------------------------------" << endl;
 		cout << "Writing updated sheet to output file.... " << endl;
-		cout << "Output saved as: " << outFileName << endl;
+		cout << "Output saved as: " << fileName << ".csv" << endl;
 		cout <<"------------------------------------------------------" << endl;
 	} else {
 		cout << "Error: Could not create output file "<< endl;
@@ -509,5 +500,5 @@ void saveToFile()
 // Count the number of rows
 void countRows()
 {
-	cout << " Number of rows: "<< ROW_COUNT << endl ;
+	cout << " Number of rows: "<< ROW_COUNT << endl;
 }
