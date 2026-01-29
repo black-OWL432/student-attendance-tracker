@@ -179,6 +179,7 @@ void loadFromFile()
 	}
 
 	columnNames.clear();
+	columnTypes.clear();
 	dataRows.clear();
 	ROW_COUNT = 0;
 
@@ -187,10 +188,16 @@ void loadFromFile()
 	if (getline(inputFile, line)) {
 		stringstream ss(line);
 		while (getline(ss, word, ',')) {
-			columnNames.push_back(word);
+			size_t pos = word.find('|');
+			if (pos != string::npos) {
+				columnNames.push_back(word.substr(0, pos));
+				columnTypes.push_back(word.substr(pos + 1));
+			} else {
+				columnNames.push_back(word);
+				columnTypes.push_back("string");
+			}
 		}
 		COLUMN_COUNT = columnNames.size();
-		columnTypes.assign(COLUMN_COUNT, "string");
 	}
 
 	while (getline(inputFile, line)) {
@@ -199,8 +206,10 @@ void loadFromFile()
 		while (getline(ss, word, ',')) {
 			row.push_back(word);
 		}
-		dataRows.push_back(row);
-		ROW_COUNT++;
+		if (!row.empty()) {
+			dataRows.push_back(row);
+			ROW_COUNT++;
+		}
 	}
 
 	inputFile.close();
@@ -270,7 +279,7 @@ void printCsvFormat()
 {
 	// header
 	for (int i = 0; i < COLUMN_COUNT; i++) {
-		cout << columnNames[i];
+		cout << columnNames[i] << "|" << columnTypes[i];
 		if (i < COLUMN_COUNT - 1) {
 			cout << ",";
 		}
@@ -472,9 +481,9 @@ void saveToFile()
 	ofstream outputFile(outFileName);
 
 	if (outputFile.is_open()) {
-		// Write header
+		// Write header with types
 		for (int i = 0; i < COLUMN_COUNT; i++) {
-			outputFile << columnNames[i] << (i < COLUMN_COUNT - 1 ? "," : "");
+			outputFile << columnNames[i] << "|" << columnTypes[i] << (i < COLUMN_COUNT - 1 ? "," : "");
 		}
 		outputFile << endl;
 
